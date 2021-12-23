@@ -2,6 +2,8 @@
 
 When building a deployment strategy for your applications, using a multi-account approach is a recommended best practice. This limits the impact for changes made and results in better modularity, security, and governance. In this session, we will dive deep into an example multi-account deployment using infrastructure-as-code (IaC) services such as the AWS CDK, AWS CodePipeline, and AWS CloudFormation. We will also explore a real-world customer use case that is deploying at scale across hundreds of AWS accounts.
 
+View the recording of the session including the live demo on YouTube: https://m.youtube.com/watch?v=AF-pSRSGNks
+
 ![Architecture](images/Cross-Account-Deployment-Arch.png)
 
 The solution consists of:
@@ -65,6 +67,8 @@ This script will:
 - Destroy the Pipeline Stack
 - Destroy the UAT and Production cross-account roles
 
+# Troubleshooting
+If your account permissions aren't set up correctly, or if you stop a deployment or cleanup mid-way through, you may have to manually clean up deployed resources. Navigate to the CloudFormation console, select the stack that needs to be cleaned up, and click the Delete button to delete the stack manually and start over.
 
 ## License
 
