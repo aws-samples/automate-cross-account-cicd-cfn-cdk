@@ -1,0 +1,104 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this
+# software and associated documentation files (the "Software"), to deal in the Software
+# without restriction, including without limitation the rights to use, copy, modify,
+# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: The AWS CloudFormation template that creates the CodePipeline 
+  Cross Account Role that will be assumed by the tooling account to deploy 
+  into target accounts
+
+Parameters:
+  ToolsAccountID:
+    Description: Account ID of the tooling AWS Account that initiates deployments to this account.
+    Type: String
+    ConstraintDescription: Must be a valid AWS Account ID without hyphens.
+    AllowedPattern: '\d{12}'
+    MinLength: 12
+    MaxLength: 12
+  Stage:
+    Description: Stage of the account we're deploying to
+    Type: String
+    AllowedValues:
+      - Prod
+      - Uat
+  KeyArn:
+    Description: Provide the KMS Key ARN if you've deployed the pipeline stack
+    Type: String
+    ConstraintDescription: Must be a valid AWS ARN for a KMS Key in the TOOLS account
+    Default: ''
+
+# If the Key Arn is blank, it's our initial deployment, 
+# so don't deploy the policy which references the bucket and key
+Conditions: 
+  DeployPolicy: !Not [!Equals [!Ref KeyArn, '']]
+
+Resources:
+  CrossAccountDeploymentRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: CodePipelineCrossAccountRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              AWS:
+                - !Sub arn:${AWS::Partition}:iam::${ToolsAccountID}:root
+            Action:
+              - sts:AssumeRole
+
+  CrossAccountDeploymentPolicy:
+    Condition: DeployPolicy
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Allows pipeline in master account to deploy API Gateway, Lambda
+      ManagedPolicyName: CodePipelineCrossAccountPolicy
+      Roles:
+        - !Ref CrossAccountDeploymentRole
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action:  
+              - cloudformation:CreateStack
+              - cloudformation:GetTemplate
+              - cloudformation:ValidateTemplate
+              - cloudformation:DeleteStack
+              - cloudformation:UpdateStack
+              - cloudformation:DescribeStack*
+            Resource: !Sub arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${Stage}ApplicationDeploymentStack/*
+            Effect: Allow
+          - Action:  
+            - iam:PassRole
+            Resource: !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:role/CloudFormationDeploymentRole
+            Effect: Allow
+          - Action: 
+              - s3:Get*
+              - s3:Put*
+              - s3:ListBucket
+            Resource: 
+              - !Sub arn:${AWS::Partition}:s3:::artifact-bucket-${ToolsAccountID}
+              - !Sub arn:${AWS::Partition}:s3:::artifact-bucket-${ToolsAccountID}/*
+            Effect: Allow
+          - Action: 
+              - kms:DescribeKey
+              - kms:GenerateDataKey*
+              - kms:Encrypt
+              - kms:ReEncrypt*
+              - kms:Decrypt
+            Resource: 
+              - !Sub ${KeyArn}
+            Effect: Allow
