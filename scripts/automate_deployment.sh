@@ -73,7 +73,7 @@ rm -rf ${CDK_OUTPUT_FILE} .cfn_outputs
 npx cdk deploy CrossAccountPipelineStack \
   --context prod-account=${PROD_ACCOUNT_ID} \
   --context uat-account=${UAT_ACCOUNT_ID} \
-  —profile pipeline \
+  --profile pipeline \
   --require-approval never \
   2>&1 | tee -a ${CDK_OUTPUT_FILE}
 sed -n -e '/Outputs:/,/^$/ p' ${CDK_OUTPUT_FILE} > .cfn_outputs
