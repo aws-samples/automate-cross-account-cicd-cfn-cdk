@@ -184,7 +184,7 @@ export class PipelineStack extends Stack {
               actionName: 'Deploy',
               templatePath: cdkBuildOutput.atPath('UatApplicationStack.template.json'),
               stackName: 'UatApplicationDeploymentStack',
-              adminPermissions: true,
+              adminPermissions: false,
               parameterOverrides: {
                 ...props.uatApplicationStack.lambdaCode.assign(
                     lambdaBuildOutput.s3Location),
@@ -203,7 +203,7 @@ export class PipelineStack extends Stack {
               actionName: 'Deploy',
               templatePath: cdkBuildOutput.atPath('ProdApplicationStack.template.json'),
               stackName: 'ProdApplicationDeploymentStack',
-              adminPermissions: true,
+              adminPermissions: false,
               parameterOverrides: {
                 ...props.prodApplicationStack.lambdaCode.assign(
                     lambdaBuildOutput.s3Location),
