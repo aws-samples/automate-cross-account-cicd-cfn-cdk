@@ -4,6 +4,8 @@ When building a deployment strategy for your applications, using a multi-account
 
 View the recording of the session including the live demo on YouTube: https://m.youtube.com/watch?v=AF-pSRSGNks
 
+**NOTE: This repository was upgraded to CDK v2 August 22, 2023.**
+
 ![Architecture](images/Cross-Account-Deployment-Arch.png)
 
 The solution consists of:

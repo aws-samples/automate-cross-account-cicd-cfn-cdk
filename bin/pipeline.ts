@@ -3,12 +3,12 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-import { App } from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
 import { ApplicationStack } from '../lib/application-stack';
 import { PipelineStack } from '../lib/pipeline-stack';
 import { RepositoryStack } from '../lib/repository-stack';
 
-const app = new App();
+const app = new cdk.App();
 const uatAccountId = app.node.tryGetContext('uat-account') || process.env.CDK_INTEG_ACCOUNT || process.env.CDK_DEFAULT_ACCOUNT;
 const prodAccountId = app.node.tryGetContext('prod-account') || process.env.CDK_INTEG_ACCOUNT || process.env.CDK_DEFAULT_ACCOUNT;
 

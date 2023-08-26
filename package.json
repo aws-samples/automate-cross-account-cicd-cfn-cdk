@@ -1,8 +1,8 @@
 {
-  "name": "cdk",
+  "name": "automate-cross-account-cicd-cfn-cdk-v2",
   "version": "0.1.0",
   "bin": {
-    "cdk": "bin/cdk.js"
+    "automate-cross-account-cicd-cfn-cdk-v2": "bin/automate-cross-account-cicd-cfn-cdk-v2.js"
   },
   "scripts": {
     "build": "tsc",
@@ -11,29 +11,17 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "1.190.0",
-    "@types/jest": "^27.0.2",
-    "@types/node": "^10.17.19",
-    "aws-cdk": "1.124.0",
-    "jest": "^27.3.1",
-    "ts-jest": "^26.4.4",
-    "ts-node": "^8.8.2",
-    "typescript": "~3.9.7"
+    "@types/jest": "^29.5.4",
+    "@types/node": "20.5.3",
+    "aws-cdk": "2.93.0",
+    "jest": "^29.6.3",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.1",
+    "typescript": "~5.1.6"
   },
   "dependencies": {
-    "@aws-cdk/aws-codebuild": "1.124.0",
-    "@aws-cdk/aws-codecommit": "1.190.0",
-    "@aws-cdk/aws-codedeploy": "1.190.0",
-    "@aws-cdk/aws-codepipeline-actions": "1.190.0",
-    "@aws-cdk/aws-lambda": "1.124.0",
-    "@aws-cdk/aws-s3": "1.124.0",
-    "@aws-cdk/core": "1.124.0",
-    "@types/uuid": "7.0.2",
-    "source-map-support": "^0.5.16",
-    "netmask": ">=2.0.1",
-    "y18n": ">=4.0.1",
-    "ansi-regex": ">=5.0.1",
-    "set-value": ">=4.0.1",
-    "pac-resolver": ">=5.0.0"
+    "aws-cdk-lib": "^2.93.0",
+    "constructs": "^10.0.0",
+    "source-map-support": "^0.5.21"
   }
 }

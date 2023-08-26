@@ -1,14 +1,14 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-import codebuild = require('@aws-cdk/aws-codebuild');
-import codecommit = require('@aws-cdk/aws-codecommit');
-import codepipeline = require('@aws-cdk/aws-codepipeline');
-import codepipeline_actions = require('@aws-cdk/aws-codepipeline-actions');
-import s3 = require('@aws-cdk/aws-s3');
-import iam = require('@aws-cdk/aws-iam');
-import kms = require('@aws-cdk/aws-kms');
-import { App, Stack, StackProps, RemovalPolicy, CfnOutput, CfnCapabilities } from '@aws-cdk/core';
+import * as codebuild from 'aws-cdk-lib/aws-codebuild';
+import * as codecommit from 'aws-cdk-lib/aws-codecommit';
+import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
+import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as kms from 'aws-cdk-lib/aws-kms';
+import { App, Stack, StackProps, RemovalPolicy, CfnOutput, CfnCapabilities } from 'aws-cdk-lib';
 
 import { ApplicationStack } from '../lib/application-stack';
 

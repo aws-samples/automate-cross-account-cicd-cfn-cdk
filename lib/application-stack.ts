@@ -1,10 +1,10 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-import codedeploy = require('@aws-cdk/aws-codedeploy');
-import lambda = require('@aws-cdk/aws-lambda');
-import apigateway = require('@aws-cdk/aws-apigateway');
-import { App, Stack, StackProps } from '@aws-cdk/core';
+import { StackProps, App, Stack } from 'aws-cdk-lib';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import * as codedeploy from 'aws-cdk-lib/aws-codedeploy';
 
 export interface ApplicationStackProps extends StackProps {
   readonly stageName: string;
@@ -22,7 +22,7 @@ export class ApplicationStack extends Stack {
       functionName: 'HelloLambda',
       code: this.lambdaCode,
       handler: 'index.handler',
-      runtime: lambda.Runtime.NODEJS_12_X,
+      runtime: lambda.Runtime.NODEJS_LATEST,
       environment: {
         STAGE_NAME: props.stageName
       }
@@ -36,7 +36,11 @@ export class ApplicationStack extends Stack {
       }
     });
 
-    const alias = func.currentVersion.addAlias(props.stageName);
+    const version = func.currentVersion;
+    const alias = new lambda.Alias(this, 'LambdaAlias', {
+      aliasName: props.stageName,
+      version,
+    });
 
     new codedeploy.LambdaDeploymentGroup(this, 'DeploymentGroup', {
       alias,
